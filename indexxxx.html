@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسبحة SHOP_tA1 الرقمية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        body {
+            background: #050505;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0;
+        }
+        .bead-container {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            border: 8px solid #22c55e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 0 50px rgba(34, 197, 94, 0.1);
+            user-select: none;
+        }
+        .bead-container:active {
+            transform: scale(0.95);
+            border-color: #4ade80;
+            box-shadow: 0 0 80px rgba(34, 197, 94, 0.3);
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .zekr-btn {
+            background: #111;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+            border: 1px solid #222;
+        }
+        .zekr-btn.active {
+            background: #22c55e;
+            color: black;
+            border-color: #22c55e;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="fixed top-0 w-full glass-nav p-4 z-50">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <span class="text-green-500 font-black text-xl italic">SHOP_tA1</span>
+            <button onclick="resetCounter()" class="text-red-400 font-bold flex items-center gap-2 bg-red-400/10 px-4 py-2 rounded-xl">
+                <i class="fas fa-undo"></i> تصفير
+            </button>
+        </div>
+    </nav>
+
+    <main class="text-center p-4">
+        <div class="flex gap-2 mb-12 overflow-x-auto no-scrollbar pb-2 justify-center">
+            <button onclick="setZekr('سبحان الله', this)" class="zekr-btn active">سبحان الله</button>
+            <button onclick="setZekr('الحمد لله', this)" class="zekr-btn">الحمد لله</button>
+            <button onclick="setZekr('الله أكبر', this)" class="zekr-btn">الله أكبر</button>
+            <button onclick="setZekr('أستغفر الله', this)" class="zekr-btn">أستغفر الله</button>
+        </div>
+
+        <div id="currentZekr" class="text-2xl font-bold text-gray-400 mb-6 animate__animated animate__fadeIn">سبحان الله</div>
+        
+        <div class="bead-container mx-auto" onclick="increment()">
+            <span id="counter" class="text-7xl font-black text-white">0</span>
+            <span class="text-green-500 font-bold mt-2 uppercase tracking-widest text-xs">اضغط للتسبيح</span>
+        </div>
+
+        <div class="mt-12 text-gray-500 text-sm font-bold">
+            <p id="totalToday">إجمالي تسبيحاتك اليوم: 0</p>
+        </div>
+    </main>
+
+    <script>
+        let count = 0;
+        let total = 0;
+        let activeZekr = "سبحان الله";
+
+        // وظيفة الزيادة
+        function increment() {
+            count++;
+            total++;
+            document.getElementById('counter').innerText = count;
+            document.getElementById('totalToday').innerText = `إجمالي تسبيحاتك اليوم: ${total}`;
+            
+            // اهتزاز خفيف للهواتف
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+
+            // تأثير بصري عند الوصول لـ 33 أو 100
+            if (count % 33 === 0) {
+                document.getElementById('counter').classList.add('animate__animated', 'animate__bounceIn');
+                setTimeout(() => {
+                    document.getElementById('counter').classList.remove('animate__animated', 'animate__bounceIn');
+                }, 500);
+            }
+        }
+
+        // تغيير الذكر
+        function setZekr(zekr, btn) {
+            activeZekr = zekr;
+            count = 0; // تصفير العداد الفرعي عند تغيير الذكر
+            document.getElementById('counter').innerText = count;
+            document.getElementById('currentZekr').innerText = zekr;
+            
+            // تحديث شكل الأزرار
+            document.querySelectorAll('.zekr-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // تصفير العداد
+        function resetCounter() {
+            if(confirm("هل تريد تصفير العداد؟")) {
+                count = 0;
+                document.getElementById('counter').innerText = count;
+            }
+        }
+    </script>
+</body>
+</html>
